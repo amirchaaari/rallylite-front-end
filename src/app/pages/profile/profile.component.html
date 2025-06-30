@@ -1,0 +1,14 @@
+<div class="container mt-5" *ngIf="user">
+  <div class="card shadow-sm p-4">
+    <div class="d-flex align-items-center">
+      <img [src]="user.avatarUrl" class="rounded-circle me-3" width="80" height="80" alt="Avatar" />
+      <div>
+        <h4>{{ user.name }}</h4>
+        <p class="mb-0"><strong>Email:</strong> {{ user.email }}</p>
+        <p class="mb-0"><strong>Sport:</strong> {{ user.sport }}</p>
+        <p class="mb-0"><strong>Level:</strong> {{ user.level }}</p>
+        <p class="mb-0"><strong>City:</strong> {{ user.city }}</p>
+      </div>
+    </div>
+  </div>
+</div>
