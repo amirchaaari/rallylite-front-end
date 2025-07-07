@@ -12,6 +12,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatchesComponent } from './pages/matches/matches.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { MyActivitiesComponent } from './pages/my-activities/my-activities.component';
+import { HomeComponent } from './pages/home/home.component';
+import { TournamentComponent } from './pages/tournament/tournament.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
     RegisterComponent,
     MatchesComponent,
     ProfileComponent,
+    MyActivitiesComponent,
+    HomeComponent,
+    TournamentComponent,
 
   ],
   imports: [

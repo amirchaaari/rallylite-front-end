@@ -8,6 +8,7 @@ import { MatchService } from 'src/app/services/match.service';
 })
 export class MatchesComponent implements OnInit {
   matches: any[] = [];
+  requestedMatches = new Set<string>();
 
   constructor(private matchService: MatchService) {}
 
@@ -18,12 +19,13 @@ export class MatchesComponent implements OnInit {
   loadMatches() {
     this.matchService.getAllMatches().subscribe((data) => {
       this.matches = data;
+      // Optionally, update requestedMatches here if your API returns info about pending requests
     });
   }
 
   joinMatch(id: string) {
     this.matchService.joinMatch(id).subscribe(() => {
-      this.loadMatches(); // reload after joining
+      this.requestedMatches.add(id);
     });
   }
 }

@@ -1,0 +1,67 @@
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-trophy me-2"></i>Upcoming Tournaments</h2>
+    <span class="badge bg-info text-dark">{{ tournaments.length }} total</span>
+  </div>
+
+  <div class="scrollable-container" style="max-height: 70vh; overflow-y: auto;">
+    <div *ngFor="let tournament of tournaments" class="card mb-3 shadow-sm border-0">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <!-- Left: Sport icon and info -->
+          <div class="col-md-8">
+            <div class="d-flex align-items-center mb-2">
+              <div
+                class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3"
+                style="width: 50px; height: 50px;"
+              >
+                <img
+                  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3be.png"
+                  alt="Tennis Ball"
+                  style="width: 32px; height: 32px;"
+                  *ngIf="tournament.sport === 'tennis' || tournament.sport === 'padel'"
+                />
+              </div>
+              <div>
+                <h5 class="mb-0 text-capitalize">{{ tournament.sport }} Tournament</h5>
+                <small class="text-muted">
+                  <i class="bi bi-geo-alt-fill"></i> {{ tournament.location }} |
+                  <i class="bi bi-calendar-event"></i> {{ tournament.date | date: 'mediumDate' }} |
+                  <i class="bi bi-people-fill"></i> {{ tournament.numberOfPlayers }} players
+                </small>
+              </div>
+            </div>
+
+            <!-- Created By -->
+            <div class="mb-1 d-flex align-items-center" *ngIf="tournament.createdBy">
+              <strong class="me-1">Created by:</strong>
+              <a [routerLink]="['/profile', tournament.createdBy._id]" class="text-decoration-none d-inline-flex align-items-center">
+                <img
+                  *ngIf="tournament.createdBy.photoUrl"
+                  [src]="tournament.createdBy.photoUrl"
+                  alt="User Photo"
+                  class="rounded-circle me-2"
+                  width="32"
+                  height="32"
+                />
+                {{ tournament.createdBy.name }}
+              </a>
+            </div>
+          </div>
+
+            <!-- Right: Join Button -->
+ <div class="col-md-4 text-md-end mt-3 mt-md-0">
+  <button
+    class="btn btn-outline-primary w-100 w-md-auto"
+    (click)="joinTournament(tournament._id)"
+    [disabled]="joinedTournaments.has(tournament._id)"
+  >
+    <i class="bi bi-person-plus me-1"></i>
+    {{ joinedTournaments.has(tournament._id) ? 'Joined' : 'Join' }}
+  </button>
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>

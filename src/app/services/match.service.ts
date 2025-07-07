@@ -28,4 +28,29 @@ export class MatchService {
   joinMatch(matchId: string) {
     return this.http.post(`${this.baseUrl}/${matchId}/join`, {}, this.getAuthHeaders());
   }
+
+
+    deleteMatch(matchId: string) {
+    return this.http.post(`${this.baseUrl}/${matchId}/delete`, {}, this.getAuthHeaders());
+  }
+
+getMyActivities() {
+  return this.http.get<any[]>(`${this.baseUrl}/me`, this.getAuthHeaders());
+}
+
+
+
+  createMatch(matchData: any) {
+    return this.http.post(this.baseUrl, matchData, this.getAuthHeaders());
+  }
+  acceptJoinRequest(matchId: string, playerId: string) {
+    return this.http.post(
+      `${this.baseUrl}/${matchId}/accept/${playerId}`,
+      {},
+      this.getAuthHeaders()
+    );
+  }
+  
+
+
 }

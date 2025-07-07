@@ -27,19 +27,25 @@ export class LoginComponent {
   onSubmit() {
     this.error = null;
     if (this.loginForm.invalid) return;
+
     this.loading = true;
-    this.http.post<{ access_token: string }>('http://localhost:3000/auth/login', this.loginForm.value)
-    .subscribe({
+
+    this.http.post<{ access_token: string, user: any }>(
+      'http://localhost:3000/auth/login',
+      this.loginForm.value
+    ).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.access_token); // ✅ match backend key
+        localStorage.setItem('token', res.access_token);
+        localStorage.setItem('userId', res.user._id); // ✅ store for Socket.IO
+        localStorage.setItem('userName', res.user.name || ''); // (optional)
+        
         this.router.navigate(['/matches']);
       },
       error: (err) => {
-        this.error ='Login failed. Please try again.';
-        this.loading = true;
+        this.error = 'Login failed. Please try again.';
+        this.loading = false;
       },
       complete: () => this.loading = false
     });
-  
   }
 }

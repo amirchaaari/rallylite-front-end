@@ -1,28 +1,58 @@
-<div class="container my-4">
-  <h2 class="mb-4">Upcoming Matches</h2>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-calendar-week me-2"></i>Upcoming Matches</h2>
+    <span class="badge bg-info text-dark">{{ matches.length }} total</span>
+  </div>
 
   <div class="scrollable-container" style="max-height: 70vh; overflow-y: auto;">
-    <div *ngFor="let match of matches" class="card mb-3 shadow-sm">
+    <div *ngFor="let match of matches" class="card mb-3 shadow-sm border-0">
       <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h5 class="card-title text-capitalize">{{ match.sport }} Match</h5>
-            <p class="card-text mb-1"><strong>Location:</strong> {{ match.location }}</p>
-            <p class="card-text mb-1"><strong>Date:</strong> {{ match.date | date: 'mediumDate' }}</p>
-            <p class="card-text mb-1"><strong>Level:</strong> {{ match.level }}</p>
-<p class="card-text mb-1">
-  <strong>Created by:</strong>
-  <a [routerLink]="['/profile', match.createdBy._id]" class="text-decoration-none d-flex align-items-center">
-    <img *ngIf="match.createdBy.photoUrl" [src]="match.createdBy.photoUrl" alt="User Photo"
-         class="rounded-circle me-2" width="32" height="32">
-    {{ match.createdBy.name }}
-  </a>
-</p>
+        <div class="row align-items-center">
+          <!-- Left: Sport icon and info -->
+          <div class="col-md-8">
+            <div class="d-flex align-items-center mb-2">
+                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                  <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3be.png" alt="Tennis Ball" style="width: 32px; height: 32px;" *ngIf="match.sport === 'tennis' || match.sport === 'padel'">
+                </div>
+              <div>
+                <h5 class="mb-0 text-capitalize">{{ match.sport }} Match ({{ match.matchType }})</h5>
+                <small class="text-muted">
+                  <i class="bi bi-geo-alt-fill"></i> {{ match.location }} |
+                  <i class="bi bi-calendar-event"></i> {{ match.date | date: 'mediumDate' }} |
+                  <i class="bi bi-bar-chart-fill"></i> {{ match.level }}
+                </small>
+              </div>
+            </div>
 
-            <p class="card-text mb-1"><strong>Players:</strong> {{ match.players.length }} / {{ match.maxPlayers }}</p>
+            <!-- Created By -->
+            <div class="mb-1 d-flex align-items-center">
+              <strong class="me-1">Created by:</strong>
+              <a [routerLink]="['/profile', match.createdBy._id]" class="text-decoration-none d-inline-flex align-items-center">
+              <img *ngIf="match.createdBy.photoUrl"
+                 [src]="match.createdBy.photoUrl"
+                 alt="User Photo"
+                 class="rounded-circle me-2"
+                 width="32" height="32" />
+              {{ match.createdBy.name }}
+              </a>
+            </div>
+
+            <!-- Players -->
+            <div>
+              <strong>Players:</strong> {{ match.players.length }} / {{ match.maxPlayers }}
+            </div>
           </div>
-          <div>
-            <button class="btn btn-outline-primary" (click)="joinMatch(match._id)">Join Match</button>
+
+          <!-- Right: Join Button -->
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <button
+              class="btn btn-outline-primary w-100 w-md-auto"
+              (click)="joinMatch(match._id)"
+              [disabled]="requestedMatches.has(match._id)"
+            >
+              <i class="bi bi-person-plus me-1"></i>
+              {{ requestedMatches.has(match._id) ? 'Join request sent' : 'Join Match' }}
+            </button>
           </div>
         </div>
       </div>

@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 
+  logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/login'; // or use Angular Router for navigation
+  }
 }

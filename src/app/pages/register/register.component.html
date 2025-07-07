@@ -48,11 +48,45 @@
           </div>
           <div class="mb-3">
             <label for="city" class="form-label">City</label>
-            <input type="text" id="city" class="form-control" formControlName="city" [class.is-invalid]="registerForm.get('city')?.invalid && registerForm.get('city')?.touched">
+            <select id="city" class="form-select" formControlName="city" [class.is-invalid]="registerForm.get('city')?.invalid && registerForm.get('city')?.touched">
+              <option value="" disabled>Select a city</option>
+              <option value="Tunis">Tunis</option>
+              <option value="Ariana">Ariana</option>
+              <option value="Ben Arous">Ben Arous</option>
+              <option value="Manouba">Manouba</option>
+              <option value="Sfax">Sfax</option>
+              <option value="Sousse">Sousse</option>
+              <option value="Nabeul">Nabeul</option>
+              <option value="Monastir">Monastir</option>
+              <option value="Mahdia">Mahdia</option>
+              <option value="Kairouan">Kairouan</option>
+              <option value="Bizerte">Bizerte</option>
+              <option value="Beja">Beja</option>
+              <option value="Jendouba">Jendouba</option>
+              <option value="Kef">Kef</option>
+              <option value="Siliana">Siliana</option>
+              <option value="Gabes">Gabes</option>
+              <option value="Gafsa">Gafsa</option>
+              <option value="Kebili">Kebili</option>
+              <option value="Tataouine">Tataouine</option>
+              <option value="Tozeur">Tozeur</option>
+              <option value="Zaghouan">Zaghouan</option>
+              <option value="Medenine">Medenine</option>
+            </select>
             <div class="invalid-feedback" *ngIf="registerForm.get('city')?.hasError('required') && registerForm.get('city')?.touched">
               City is required.
             </div>
           </div>
+
+
+
+
+
+
+
+
+
+          
           <div *ngIf="error" class="alert alert-danger py-2">{{ error }}</div>
           <div *ngIf="success" class="alert alert-success py-2">{{ success }}</div>
           <button class="btn btn-primary w-100" type="submit" [disabled]="loading">
