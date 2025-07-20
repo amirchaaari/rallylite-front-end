@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS'
+    }
+
+    environment {
+        GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
+        GHCR_CREDENTIALS_ID = 'GHCR_PAT'
+    }
+
+    stages {
+        stage('Checkout Source Code') {
+            steps {
+                deleteDir()
+                git branch: 'main',
+                    credentialsId: "${GHCR_CREDENTIALS_ID}",
+                    url: 'https://github.com/amirchaaari/rallylite-front-end.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build Angular App') {
+            steps {
+                sh 'npm run build -- --configuration=production'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                     dockerImage = docker.build("${GHCR_REPO}:latest", "--platform linux/amd64 .")
+                }
+            }
+        }
+
+        stage('Push to GHCR') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${GHCR_CREDENTIALS_ID}",
+                    usernameVariable: 'GHCR_USER',
+                    passwordVariable: 'GHCR_PAT'
+                )]) {
+                    sh '''
+                        echo $GHCR_PAT | docker login ghcr.io -u $GHCR_USER --password-stdin
+                        docker push ghcr.io/amirchaaari/rallylite-frontend:latest
+                        docker logout ghcr.io
+                    '''
+                }
+            }
+        }
+
+        // stage('Deploy to K8s') {
+        //     steps {
+        //         sh 'kubectl apply -f k8s/frontend-deployment.yaml'
+        //         sh 'kubectl apply -f k8s/frontend-service.yaml'
+        //     }
+        // }
+    }
+
+    post {
+        success {
+            echo '✅ Frontend pipeline completed successfully.'
+        }
+        failure {
+            echo '❌ Frontend pipeline failed.'
+        }
+    }
+}
