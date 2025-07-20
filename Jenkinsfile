@@ -28,7 +28,7 @@ pipeline {
 
         stage('Build Angular App') {
             steps {
-                sh 'ng build --configuration=production'
+                sh './node_modules/.bin/ng build --configuration=production'
             }
         }
 
