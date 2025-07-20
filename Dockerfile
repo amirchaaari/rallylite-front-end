@@ -5,7 +5,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the locally built Angular app
-COPY dist/your-app-name /usr/share/nginx/html
+COPY dist/rallylite-frontend /usr/share/nginx/html
 
 # Optional: Custom Nginx config
 # COPY nginx.conf /etc/nginx/nginx.conf
