@@ -91,7 +91,7 @@ export const environment = {
 
     post {
         success {
-            echo ' Frontend pipeline completed successfully.'
+            echo ' Frontend pipeline completed successfully.' //test
         }
         failure {
             echo ' Frontend pipeline failed.' 
