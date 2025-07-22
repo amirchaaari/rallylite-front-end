@@ -78,7 +78,7 @@ export const environment = {
         sh '''
 
                         export IMAGE_TAG=${VERSION}
-                        envsubst < k8s/frontend-deployment.yaml.tpl > k8s/frontend-deployment.yaml
+                        envsubst < k8s/frontend-deployment.yaml > k8s/frontend-deployment.yaml
 
                         kubectl apply -f k8s/frontend-deployment.yaml
                         kubectl apply -f k8s/frontend-service.yaml
