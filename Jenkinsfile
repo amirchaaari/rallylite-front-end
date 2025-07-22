@@ -8,7 +8,7 @@ pipeline {
     environment {
         GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
         GHCR_CREDENTIALS_ID = 'GHCR_PAT'
-        API_URL = 'http://4.255.105.132' 
+        API_URL = 'http://4.255.105.132'
     }
 
     stages {
@@ -49,9 +49,11 @@ export const environment = {
         stage('Build Docker Image') {
             steps {
                 script {
- def shortCommit = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    def shortCommit = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                     env.IMAGE_TAG = shortCommit
-                    dockerImage = docker.build("${GHCR_REPO}:${IMAGE_TAG}", "--platform linux/amd64 .")                }
+                    env.VERSION = shortCommit
+                    docker.build("${GHCR_REPO}:${IMAGE_TAG}", "--platform linux/amd64 .")
+                }
             }
         }
 
@@ -63,11 +65,11 @@ export const environment = {
                     passwordVariable: 'GHCR_PAT'
                 )]) {
                     sh '''
-                         echo $GHCR_PAT | docker login ghcr.io -u $GHCR_USER --password-stdin
-                            docker push ${GHCR_REPO}:${IMAGE_TAG}
-                            docker tag ${GHCR_REPO}:${IMAGE_TAG} ${GHCR_REPO}:latest
-                            docker push ${GHCR_REPO}:latest
-                            docker logout ghcr.io
+                        echo $GHCR_PAT | docker login ghcr.io -u $GHCR_USER --password-stdin
+                        docker push ${GHCR_REPO}:${IMAGE_TAG}
+                        docker tag ${GHCR_REPO}:${IMAGE_TAG} ${GHCR_REPO}:latest
+                        docker push ${GHCR_REPO}:latest
+                        docker logout ghcr.io
                     '''
                 }
             }
@@ -75,22 +77,24 @@ export const environment = {
 
         stage('Deploy to K8s') {
             steps {
-        sh '''
+                sh '''
+                    which envsubst || (apt-get update && apt-get install -y gettext)
 
-                        export IMAGE_TAG=${VERSION}
-                        envsubst < k8s/frontend-deployment.yaml | kubectl apply -f -
-                        kubectl apply -f k8s/frontend-service.yaml
-                    '''
+                    export IMAGE_TAG=${VERSION}
+                    envsubst < k8s/frontend-deployment.yaml > k8s/frontend-deployment-rendered.yaml
+                    kubectl apply -f k8s/frontend-deployment-rendered.yaml
+                    kubectl apply -f k8s/frontend-service.yaml
+                '''
             }
         }
     }
 
     post {
         success {
-            echo ' Frontend pipeline completed successfully.'
+            echo '✅ Frontend pipeline completed successfully.'
         }
         failure {
-            echo ' Frontend pipeline failed.'
+            echo '❌ Frontend pipeline failed.'
         }
     }
 }
