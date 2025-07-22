@@ -49,8 +49,9 @@ export const environment = {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${GHCR_REPO}:latest", "--platform linux/amd64 .")
-                }
+ def shortCommit = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    env.IMAGE_TAG = shortCommit
+                    dockerImage = docker.build("${GHCR_REPO}:${IMAGE_TAG}", "--platform linux/amd64 .")                }
             }
         }
 
@@ -62,9 +63,11 @@ export const environment = {
                     passwordVariable: 'GHCR_PAT'
                 )]) {
                     sh '''
-                        echo $GHCR_PAT | docker login ghcr.io -u $GHCR_USER --password-stdin
-                        docker push ghcr.io/amirchaaari/rallylite-frontend:latest
-                        docker logout ghcr.io
+                         echo $GHCR_PAT | docker login ghcr.io -u $GHCR_USER --password-stdin
+                            docker push ${GHCR_REPO}:${IMAGE_TAG}
+                            docker tag ${GHCR_REPO}:${IMAGE_TAG} ${GHCR_REPO}:latest
+                            docker push ${GHCR_REPO}:latest
+                            docker logout ghcr.io
                     '''
                 }
             }
@@ -72,8 +75,15 @@ export const environment = {
 
         stage('Deploy to K8s') {
             steps {
-                sh 'kubectl apply -f k8s/frontend-deployment.yaml'
-                sh 'kubectl apply -f k8s/frontend-service.yaml'
+        sh '''
+                        apt-get update && apt-get install -y gettext
+
+                        export IMAGE_TAG=${VERSION}
+                        envsubst < k8s/frontend-deployment.yaml.tpl > k8s/frontend-deployment.yaml
+
+                        kubectl apply -f k8s/frontend-deployment.yaml
+                        kubectl apply -f k8s/frontend-service.yaml
+                    '''
             }
         }
     }
