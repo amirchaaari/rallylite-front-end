@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class LoginComponent {
     this.loading = true;
 
     this.http.post<{ access_token: string, user: any }>(
-      'http://localhost:3000/auth/login',
+       `${environment.apiUrl}/auth/login`,
       this.loginForm.value
     ).subscribe({
       next: (res) => {

@@ -56,12 +56,12 @@ pipeline {
             }
         }
 
-        // stage('Deploy to K8s') {
-        //     steps {
-        //         sh 'kubectl apply -f k8s/frontend-deployment.yaml'
-        //         sh 'kubectl apply -f k8s/frontend-service.yaml'
-        //     }
-        // }
+        stage('Deploy to K8s') {
+            steps {
+                sh 'kubectl apply -f k8s/frontend-deployment.yaml'
+                sh 'kubectl apply -f k8s/frontend-service.yaml'
+            }
+        }
     }
 
     post {

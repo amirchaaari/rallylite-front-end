@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class SocketService {
     const userId = localStorage.getItem('userId') || '';
     console.log(`SocketService: connecting with userId = ${userId}`);
 
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(`${environment.apiUrl}`, {
       withCredentials: true,
       transports: ['websocket'],
       query: { userId },

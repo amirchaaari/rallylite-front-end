@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +35,7 @@ export class RegisterComponent {
     this.success = null;
     if (this.registerForm.invalid) return;
     this.loading = true;
-    this.http.post('http://localhost:3000/auth/register', this.registerForm.value)
+    this.http.post(`${environment.apiUrl}/auth/register`, this.registerForm.value)
       .subscribe({
         next: () => {
           this.success = 'Registration successful! You can now log in.';

@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MatchService {
-  private baseUrl = 'http://localhost:3000/matches';
+  private baseUrl = `${environment.apiUrl}/matches`;
 
   constructor(private http: HttpClient) {}
 
