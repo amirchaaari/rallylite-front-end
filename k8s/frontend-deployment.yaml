@@ -1,23 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rallylite-backend
+  name: rallylite-frontend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: rallylite-backend
+      app: rallylite-frontend
   template:
     metadata:
       labels:
-        app: rallylite-backend
+        app: rallylite-frontend
     spec:
       containers:
-        - name: backend
-          image: ghcr.io/amirchaaari/rallylite-backend:latest
+        - name: frontend
+          image: ghcr.io/amirchaaari/rallylite-frontend:latest
           ports:
-            - containerPort: 3000
-          env:
-            - name: MONGO_URI
-              value: "mongodb+srv://amirchaari630:smrG8YWnVJkve8TK@cluster0.1ulxxgm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
----
+            - containerPort: 80

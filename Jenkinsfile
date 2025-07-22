@@ -8,6 +8,7 @@ pipeline {
     environment {
         GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
         GHCR_CREDENTIALS_ID = 'GHCR_PAT'
+        API_URL = 'http://4.255.105.132' 
     }
 
     stages {
@@ -17,6 +18,19 @@ pipeline {
                 git branch: 'main',
                     credentialsId: "${GHCR_CREDENTIALS_ID}",
                     url: 'https://github.com/amirchaaari/rallylite-front-end.git'
+            }
+        }
+
+        stage('Inject Environment File') {
+            steps {
+                script {
+                    writeFile file: 'src/environments/environment.prod.ts', text: """
+export const environment = {
+  production: true,
+  apiUrl: '${API_URL}'
+};
+"""
+                }
             }
         }
 
@@ -35,7 +49,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     dockerImage = docker.build("${GHCR_REPO}:latest", "--platform linux/amd64 .")
+                    dockerImage = docker.build("${GHCR_REPO}:latest", "--platform linux/amd64 .")
                 }
             }
         }
@@ -66,10 +80,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Frontend pipeline completed successfully.'
+            echo ' Frontend pipeline completed successfully.'
         }
         failure {
-            echo '❌ Frontend pipeline failed.'
+            echo ' Frontend pipeline failed.'
         }
     }
 }
