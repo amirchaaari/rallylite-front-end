@@ -76,7 +76,6 @@ export const environment = {
         stage('Deploy to K8s') {
             steps {
         sh '''
-                        apt-get update && apt-get install -y gettext
 
                         export IMAGE_TAG=${VERSION}
                         envsubst < k8s/frontend-deployment.yaml.tpl > k8s/frontend-deployment.yaml
