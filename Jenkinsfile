@@ -8,7 +8,7 @@ pipeline {
     environment {
         GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
         GHCR_CREDENTIALS_ID = 'GHCR_PAT'
-        API_URL = 'http://4.255.105.132'
+        API_URL = 'http://4.157.135.176'
     }
 
     stages {
