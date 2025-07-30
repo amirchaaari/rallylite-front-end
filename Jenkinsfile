@@ -44,6 +44,11 @@ export const environment = {
 
 
 
+stage('Dependency Audit') {
+    steps {
+        sh 'npm audit --audit-level=high || true'
+    }
+}
 
 
         stage('SonarQube Analysis') {
@@ -83,6 +88,15 @@ export const environment = {
                 }
             }
         }
+
+
+
+        stage('Security: Trivy Image Scan') {
+    steps {
+            sh 'trivy image --severity CRITICAL,HIGH --exit-code 1 ghcr.io/amirchaaari/rallylite-backend:${IMAGE_TAG}'
+    }
+}
+
 
         stage('Push to GHCR') {
             steps {
