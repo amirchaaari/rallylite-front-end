@@ -8,7 +8,9 @@ pipeline {
     environment {
         GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
         GHCR_CREDENTIALS_ID = 'GHCR_PAT'
-        API_URL = 'http://4.157.135.176'
+        API_URL = 'http://57.151.36.44'
+            SONARQUBE_ENV = 'SonarQube' // Must match the Jenkins config name
+    SONAR_PROJECT_KEY = 'rallylite-front'
     }
 
     stages {
@@ -39,6 +41,31 @@ export const environment = {
                 sh 'npm install --legacy-peer-deps'
             }
         }
+
+
+
+
+
+        stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv("${SONARQUBE_ENV}") {
+            sh "npx sonar-scanner \
+                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=$SONAR_HOST_URL \
+                -Dsonar.login=$SONAR_AUTH_TOKEN"
+        }
+    }
+}
+
+
+stage('Quality Gate') {
+    steps {
+        timeout(time: 1, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
+}
 
         stage('Build Angular App') {
             steps {
