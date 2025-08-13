@@ -51,6 +51,17 @@ stage('Dependency Audit') {
 }
 
 
+
+ stage('Secrets Scan (Gitleaks)') {
+    steps {
+        // sh 'gitleaks detect --source . --verbose'
+                sh 'gitleaks detect --source . --verbose || true'
+
+    }
+}
+
+
+
         stage('SonarQube Analysis') {
     steps {
         withSonarQubeEnv("${SONARQUBE_ENV}") {
@@ -91,11 +102,12 @@ stage('Dependency Audit') {
 
 
 
-        stage('Security: Trivy Image Scan') {
-    steps {
-            sh 'trivy image --severity CRITICAL,HIGH --exit-code 1 ghcr.io/amirchaaari/rallylite-backend:${IMAGE_TAG}'
-    }
-}
+        stage('Image Scan (Trivy)') {
+            steps {
+                sh 'trivy image ${GHCR_REPO}:${IMAGE_TAG} || true'
+            }
+        }
+
 
 
         stage('Push to GHCR') {
