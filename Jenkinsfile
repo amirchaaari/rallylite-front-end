@@ -8,7 +8,7 @@ pipeline {
     environment {
         GHCR_REPO = 'ghcr.io/amirchaaari/rallylite-frontend'
         GHCR_CREDENTIALS_ID = 'GHCR_PAT'
-        API_URL = 'http://57.151.36.44'
+        API_URL = 'http://172.214.119.18'
             SONARQUBE_ENV = 'SonarQube' // Must match the Jenkins config name
     SONAR_PROJECT_KEY = 'rallylite-front'
     }
