@@ -1,27 +1,95 @@
-# RallyliteFrontend
+# 🎾 Rallylite Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+Rallylite is a Paddle Tennis matchmaking and tournament management platform.  
+Players can post matches, request to join existing ones, and register for tournaments.  
+This is an early-stage project with plans to integrate **AI features** for player skill matching, performance analysis, and tournament insights.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🖥️ Tech Stack
 
-## Code scaffolding
+- **Framework:** Angular  
+- **Language:** TypeScript  
+- **Containerization:** Docker  
+- **Deployment:** Azure Kubernetes Service (AKS)  
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 📁 Project Structure
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+rallylite-frontend/
+├── src/
+│ ├── app/
+│ ├── assets/
+│ └── environments/
+├── Dockerfile
+├── package.json
+└── angular.json
 
-## Running unit tests
+yaml
+Data format:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Copy code
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## ⚙️ Local Setup
 
-## Further help
+### 1. Clone the repository
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+git clone https://github.com/your-username/rallylite-frontend.git
+cd rallylite-frontend
+2. Install dependencies
+bash
+Data format:
+
+Copy code
+npm install
+3. Run locally
+bash
+Data format:
+
+Copy code
+ng serve
+The app will be available at 👉 http://localhost:4200
+
+🐳 Docker
+Build the image
+bash
+Data format:
+
+Copy code
+docker build -t rallylite-frontend .
+Run the container
+bash
+Data format:
+
+Copy code
+docker run -d -p 80:80 rallylite-frontend
+This image serves the built Angular app using NGINX.
+
+🌍 Deployment
+The frontend Docker image is pushed to GitHub Container Registry (GHCR) and deployed on Azure Kubernetes Service (AKS).
+
+Pipeline flow:
+
+Jenkins builds and tests the Angular app.
+
+Docker image is created and tagged.
+
+Image is pushed to GHCR.
+
+Kubernetes manifests are applied to AKS for deployment.
+
+🚀 Roadmap
+ Integrate AI-based player match suggestions
+
+ Add match history and player statistics
+
+ Implement real-time notifications for match requests
+
+ Improve responsive layout and accessibility
+
+📄 License
+MIT License © 2025 Rallylite Team
